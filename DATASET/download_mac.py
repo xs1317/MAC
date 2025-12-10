@@ -67,7 +67,7 @@ class Downloader(threading.Thread):
 
 
 if __name__ == "__main__":
-    url_json_path ='./metadata_multi_attr_split_final.json'
+    url_json_path ='./metadata_multi_attr_split.json'
 
     url_dict = {}
     with open(url_json_path,'r') as f:
@@ -96,4 +96,5 @@ if __name__ == "__main__":
     with open('fail.log','w') as f:
         for d in threads:
             for fail_url in d.fail_list:
+
                 f.write(fail_url+'\n')
