@@ -1,0 +1,115 @@
+CLIP:
+  ImgBackBone: 'ViT-B/16'
+  ImgSize: [224, 224]
+
+graph_params:
+  model_name: gipcol
+  model: graphfull
+  dropout: true
+  norm: true
+  nlayers: 
+  gr_emb: d4096,d
+  emb_dim: 768
+  # init: utils/mitstates-graph.t7
+  init: null
+  image_extractor: resnet18
+  train_only: true
+  gcn_type: gcn
+  lr: 5.0e-05
+  weight_decay: 1.0e-05
+
+Prompt:
+  ContextLen: 3
+  ContextInitStr: ''
+  ContextDim: 512
+  ImgResolution: 224
+  ClassSpecific: False
+  ClassTokenPosition: "end"
+
+  init_prompt_weight: False
+  attr_weight_file: ""
+  obj_weight_file: ""
+  pair_weight_file: ""
+
+Trainer:
+  MAX_EPOCH: 200
+  Prec: 'fp16'
+  CalAttrLoss: False
+  CalObjLoss: False
+  CalPairLoss: True
+
+Optim:
+  NAME: "sgd"
+  LR: 5.0e-5
+  WEIGHT_DECAY: 1.0e-5
+  MOMENTUM: 0.9
+  SGD_DAMPNING: 0
+  SGD_NESTEROV: False
+  RMSPROP_ALPHA: 0.99
+  ADAM_BETA1: 0.9
+  ADAM_BETA2: 0.999
+  # STAGED_LR allows different layers to have
+  # different lr, e.g. pre-trained base layers
+  # can be assigned a smaller lr than the new
+  # classification layer
+  STAGED_LR: False
+  NEW_LAYERS: ()
+  BASE_LR_MULT: 0.1
+  # Learning rate scheduler
+  LR_SCHEDULER: "cosine"
+  # -1 or 0 means the stepsize is equal to max_epoch
+  STEPSIZE: (-1, )
+  GAMMA: 0.1
+  MAX_EPOCH: 200
+  # Set WARMUP_EPOCH larger than 0 to activate warmup training
+  WARMUP_EPOCH: 1
+  # Either linear or constant
+  WARMUP_TYPE: "constant"
+  # Constant learning rate when type=constant
+  WARMUP_CONS_LR: 1.0e-5
+  # Minimum learning rate when type=linear
+  WARMUP_MIN_LR: 1.0e-5
+  # Recount epoch for the next scheduler (last_epoch=-1)
+  # Otherwise last_epoch=warmup_epoch
+  WARMUP_RECOUNT: True
+
+train:
+  experiment_name: gipcol_all_gipcol_all_iccv
+  dataset: multi_attrs_all
+  split: multi_attr_split_all
+  dataset_path: /root/autodl-tmp/data/CZSL/multi_attr 
+  dataset_dir: /root/autodl-tmp/data/CZSL/multi_attr 
+  optimizer: Adam
+  scheduler: None
+  step_size: 5
+  gamma: 0.5
+  lr: 0.00005
+  # attr_dropout: 0.3
+  # weight_decay: 0.00001
+  context_length: 8
+  train_batch_size: 12
+  gradient_accumulation_steps: 2
+  seed: 0
+  epochs: 40
+  save_path: /root/autodl-tmp/Models/csp/pretrain/multi_attr/gipcol
+  val_metric: best_loss
+  save_final_model: True
+  load_model: /root/autodl-tmp/Models/csp/pretrain/multi_attr/gipcol/gipcol_all_iccv/final_model.pt
+  multi_label_loss: CrossEntropy
+test:
+  test_context_length: 8
+  eval_batch_size: 64
+  open_world: True
+  topk: 1
+  text_encoder_batch_size: 1024
+  threshold_trials: 50
+  bias: 0.001
+  text_first: True
+
+
+
+common:
+  graph_lr: 0.0005
+  weight_decay: 1.0e-5
+  soft_emb_dropout: 0.3
+  clip_model: ViT-L/14

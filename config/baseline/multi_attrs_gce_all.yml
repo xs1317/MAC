@@ -1,0 +1,43 @@
+---
+experiment:
+  name: graphembed/mitstates/base
+
+
+model_params:
+  model_name: gce
+  dropout: true
+  norm: true
+  nlayers: 
+  gr_emb: d4096,d
+  emb_dim: 512
+  emb_init: word2vec
+ # graph_init: utils/mitstates-graph.t7
+  image_extractor: resnet18
+  train_only: true
+  load_model: 
+
+training:
+  experiment_name: gce_all_all
+  split: multi_attr_split_all
+  dataset_path: /root/autodl-tmp/data/CZSL/multi_attr
+  save_path:
+  batch_size: 256
+  eval_val_every: 1
+  load: 
+  lr: 5.0e-05
+  wd: 5.0e-05
+  lrg: 5.0e-6
+  margin: 0.5
+  epochs: 40
+  save_every_n: 1
+  norm_family: imagenet
+  test_batch_size: 256
+  test_set: test
+  topk: 1
+  workers: 8
+  update_features: true
+  freeze_features: false
+  test_context_length: 16
+  open_world: True
+  eval_batch_size: 256
+  multi_label_loss: 

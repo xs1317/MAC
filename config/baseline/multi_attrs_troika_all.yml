@@ -1,0 +1,52 @@
+model:
+  model_name: troika
+  clip_model: "ViT-L/14"
+  prompt_template: ["a photo of x x", "a photo of x", "a photo of x"]
+  ctx_init: ["a photo of ", "a photo of ", "a photo of "]
+  # clip_model: 
+  cmt_layers: 3
+  init_lamda: 0.1
+  cross_attn_dropout: 0.1
+  adapter_dim: 64
+  adapter_dropout: 0.1
+  # branch
+  pair_loss_weight: 1.0
+  pair_inference_weight: 1.0
+  attr_loss_weight: 1.0
+  attr_inference_weight: 1.0
+  obj_loss_weight: 1.0
+  obj_inference_weight: 1.0
+
+train:
+  experiment_name: troika_all
+  dataset: multi-attrs
+  split: multi_attr_split_all
+  dataset_path: 
+  optimizer: Adam
+  scheduler: StepLR
+  step_size: 5
+  gamma: 0.5
+  lr: 0.0001
+  attr_dropout: 0.3
+  weight_decay: 0.00005
+  context_length: 8
+  train_batch_size: 2
+  gradient_accumulation_steps: 1
+  # seed: 
+  epochs: 40
+  epoch_start: 0
+  save_path: 
+  val_metric: best_loss
+  save_final_model: True
+  multi_label_loss: BCE
+  load_model:
+
+test:
+  eval_batch_size: 16
+  open_world: True
+  topk: 1
+  text_encoder_batch_size: 1024
+  test_context_length: 8
+  threshold_trials: 50
+  bias: 0.001
+  text_first: True

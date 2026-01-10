@@ -1,0 +1,48 @@
+model:
+  model_name: clip
+  clip_model: "ViT-L/14"
+  # clip_model: 
+  cmt_layers: 3
+  init_lamda: 0.1
+  cross_attn_dropout: 0.1
+  adapter_dim: 64
+  adapter_dropout: 0.1
+  # branch
+  pair_loss_weight: 1.0
+  pair_inference_weight: 1.0
+  attr_loss_weight: 1.0
+  attr_inference_weight: 1.0
+  obj_loss_weight: 1.0
+  obj_inference_weight: 1.0
+
+train:
+  split: multi_attr_split_all
+  experiment_name: clip
+  dataset: multi-attrs
+  dataset_path: 
+  optimizer: Adam
+  scheduler: None
+  step_size: 5
+  gamma: 0.5
+  lr: 0.00005
+#  attr_dropout: 0.3
+  weight_decay: 0.00001
+  context_length: 8
+  train_batch_size: 32
+  gradient_accumulation_steps: 2
+  seed: 0
+  epochs: 20
+  save_path: 
+  val_metric: best_loss
+  save_final_model: True
+
+test:
+  test_context_length: 16
+  eval_batch_size: 256
+  open_world: False
+  topk: 1
+  text_encoder_batch_size: 1024
+  threshold_trials: 50
+  bias: 0.001
+  text_first: True
+  open_world: True
